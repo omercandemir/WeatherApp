@@ -1,48 +1,28 @@
 <template>
-  <div class="text-white mb-8">
+<div>
+  <p v-if="!isLoading">Veriable Loading...</p>
+  <div class="text-white mb-8" v-if="isLoading">
       <div class="places-input text-gray-800">
-          <input type="text" class="w-full">
+          <input type="search" id="address" class="form-control" placeholder="Choose a city..." />
+          <p>Selected: <strong id="address-value">none</strong></p>
       </div>
-      <div class="weather-container font-sans w-128 max-w-lg rounded-lg overflow-hidden bg-gray-900 shadow-lg mt-4">
+      <div class="weather-container font-sans md:w-128 max-w-lg rounded-lg overflow-hidden bg-gray-900 shadow-lg mt-8">
         <div class="current-weather flex items-center justify-between px-6 py-8">
-            <div class="flex items-center">
+            <div class="flex flex-col md:flex-row items-center">
                 <div>
-                  <div class="text-6xl font-semibold">8°C</div>
-                  <div>Feels Like 2°C</div>
+                  <div class="text-6xl font-semibold">{{currentVeriable.degree}}°C</div>
+                  <div>Feels Like {{currentVeriable.felt}}°C</div>
                 </div>
                 <div class="mx-5">
-                    <div class="font-semibold">Cloudy</div>
-                    <div>TR, Istanbul</div>
+                    <div class="font-semibold">{{currentVeriable.summary}}</div>
+                    <div>{{currentVeriable.timezone}}</div>
                 </div>
             </div>
-            <div>icon</div>
-        </div>
-        <div class="future-weather text-sm bg-gray-800 px-6 py-6 overflow-hidden">
-            <div class="flex items-center mt-8"> <!-- Day Item -->
-                <div class="w-1/6 text-lg text-gray-200">MON</div>
-                <div class="w-4/6 px-4 flex items-center">
-                    <div>icon</div>
-                    <div class="ml-3">Cloudy with a chance of showers</div>
-                </div>
-                <div class="w-1/6 text-right">
-                    <div>5°C</div>
-                    <div>-2°C</div>
-                </div>
-            </div> <!-- End Day Item -->
-            <div class="flex items-center mt-8"> <!-- Day Item -->
-                <div class="w-1/6 text-lg text-gray-200">TUE</div>
-                <div class="w-4/6 px-4 flex items-center">
-                    <div>icon</div>
-                    <div class="ml-3">Cloudy with a chance of showers</div>
-                </div>
-                <div class="w-1/6 text-right">
-                    <div>5°C</div>
-                    <div>-2°C</div>
-                </div>
-            </div> <!-- End Day Item -->
+            <div><img :src="currentVeriable.icon" :alt="currentVeriable.timezone" width="96px" height="96px"></div>
         </div>
       </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -52,7 +32,17 @@ export default {
     },
     data() {
         return {
+            isLoading: false,
+            currentVeriable: {
+                timezone: '',
+                degree: '',
+                felt: '',
+                summary: '',
+                icon: 'https://www.weatherbit.io/static/img/icons/',
+
+            },
             location: {
+                name: 'Europe/Istanbul',
                 lat: 41.0351,
                 lon: 28.9833,
             },
@@ -60,11 +50,16 @@ export default {
     },
     methods: {
         fetchData(){
-
             fetch(`api/weather?lat=${this.location.lat}&lon=${this.location.lon}`)
                 .then(response => response.json())
                 .then(data => {
                     console.log(data)
+                    this.currentVeriable.timezone = data.data[0].timezone;
+                    this.currentVeriable.degree = data.data[0].temp;
+                    this.currentVeriable.summary = data.data[0].weather.description;
+                    this.currentVeriable.felt = data.data[0].app_temp;
+                    this.currentVeriable.icon = this.currentVeriable.icon + data.data[0].weather.icon + '.png';
+                    this.isLoading = true;
                 })
         }
     },

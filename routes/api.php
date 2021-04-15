@@ -22,6 +22,6 @@ Route::get('/weather', function () {
     $apikey = config('services.weather.api');
     $lat = request('lat');
     $lon = request('lon');
-    $response = Http::get('https://api.openweathermap.org/data/2.5/onecall?lat='.$lat.'&lon='.$lon.'&appid='.$apikey.'');
+    $response = Http::get('https://api.weatherbit.io/v2.0/current?lat='.$lat.'&lon='.$lon.'&key='.$apikey.'');
     return $response->json();
 });

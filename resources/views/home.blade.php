@@ -7,9 +7,10 @@
     <title>Weather App</title>
     <link rel="stylesheet" href="/css/main.css">
     <script src="/js/app.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/places.js@1.19.0" defer></script>
 </head>
-<body class="bg-blue-500">
-    <div id="app" class="fex justify-center pt-16">
+<body class="bg-blue-200">
+    <div id="app" class="flex justify-center pt-16">
         <weather-card></weather-card>
     </div>
 </body>

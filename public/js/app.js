@@ -1872,33 +1872,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mounted: function mounted() {
     this.fetchData();
   },
   data: function data() {
     return {
+      isLoading: false,
+      currentVeriable: {
+        timezone: '',
+        degree: '',
+        felt: '',
+        summary: '',
+        icon: 'https://www.weatherbit.io/static/img/icons/'
+      },
       location: {
+        name: 'Europe/Istanbul',
         lat: 41.0351,
         lon: 28.9833
       }
@@ -1906,10 +1895,18 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     fetchData: function fetchData() {
+      var _this = this;
+
       fetch("api/weather?lat=".concat(this.location.lat, "&lon=").concat(this.location.lon)).then(function (response) {
         return response.json();
       }).then(function (data) {
         console.log(data);
+        _this.currentVeriable.timezone = data.data[0].timezone;
+        _this.currentVeriable.degree = data.data[0].temp;
+        _this.currentVeriable.summary = data.data[0].weather.description;
+        _this.currentVeriable.felt = data.data[0].app_temp;
+        _this.currentVeriable.icon = _this.currentVeriable.icon + data.data[0].weather.icon + '.png';
+        _this.isLoading = true;
       });
     }
   }
@@ -37469,104 +37466,94 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", [
+    !_vm.isLoading ? _c("p", [_vm._v("Veriable Loading...")]) : _vm._e(),
+    _vm._v(" "),
+    _vm.isLoading
+      ? _c("div", { staticClass: "text-white mb-8" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass:
+                "weather-container font-sans md:w-128 max-w-lg rounded-lg overflow-hidden bg-gray-900 shadow-lg mt-8"
+            },
+            [
+              _c(
+                "div",
+                {
+                  staticClass:
+                    "current-weather flex items-center justify-between px-6 py-8"
+                },
+                [
+                  _c(
+                    "div",
+                    { staticClass: "flex flex-col md:flex-row items-center" },
+                    [
+                      _c("div", [
+                        _c("div", { staticClass: "text-6xl font-semibold" }, [
+                          _vm._v(_vm._s(_vm.currentVeriable.degree) + "°C")
+                        ]),
+                        _vm._v(" "),
+                        _c("div", [
+                          _vm._v(
+                            "Feels Like " +
+                              _vm._s(_vm.currentVeriable.felt) +
+                              "°C"
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "mx-5" }, [
+                        _c("div", { staticClass: "font-semibold" }, [
+                          _vm._v(_vm._s(_vm.currentVeriable.summary))
+                        ]),
+                        _vm._v(" "),
+                        _c("div", [
+                          _vm._v(_vm._s(_vm.currentVeriable.timezone))
+                        ])
+                      ])
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("div", [
+                    _c("img", {
+                      attrs: {
+                        src: _vm.currentVeriable.icon,
+                        alt: _vm.currentVeriable.timezone,
+                        width: "96px",
+                        height: "96px"
+                      }
+                    })
+                  ])
+                ]
+              )
+            ]
+          )
+        ])
+      : _vm._e()
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "text-white mb-8" }, [
-      _c("div", { staticClass: "places-input text-gray-800" }, [
-        _c("input", { staticClass: "w-full", attrs: { type: "text" } })
-      ]),
+    return _c("div", { staticClass: "places-input text-gray-800" }, [
+      _c("input", {
+        staticClass: "form-control",
+        attrs: {
+          type: "search",
+          id: "address",
+          placeholder: "Choose a city..."
+        }
+      }),
       _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass:
-            "weather-container font-sans w-128 max-w-lg rounded-lg overflow-hidden bg-gray-900 shadow-lg mt-4"
-        },
-        [
-          _c(
-            "div",
-            {
-              staticClass:
-                "current-weather flex items-center justify-between px-6 py-8"
-            },
-            [
-              _c("div", { staticClass: "flex items-center" }, [
-                _c("div", [
-                  _c("div", { staticClass: "text-6xl font-semibold" }, [
-                    _vm._v("8°C")
-                  ]),
-                  _vm._v(" "),
-                  _c("div", [_vm._v("Feels Like 2°C")])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "mx-5" }, [
-                  _c("div", { staticClass: "font-semibold" }, [
-                    _vm._v("Cloudy")
-                  ]),
-                  _vm._v(" "),
-                  _c("div", [_vm._v("TR, Istanbul")])
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", [_vm._v("icon")])
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass:
-                "future-weather text-sm bg-gray-800 px-6 py-6 overflow-hidden"
-            },
-            [
-              _c("div", { staticClass: "flex items-center mt-8" }, [
-                _c("div", { staticClass: "w-1/6 text-lg text-gray-200" }, [
-                  _vm._v("MON")
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "w-4/6 px-4 flex items-center" }, [
-                  _c("div", [_vm._v("icon")]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "ml-3" }, [
-                    _vm._v("Cloudy with a chance of showers")
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "w-1/6 text-right" }, [
-                  _c("div", [_vm._v("5°C")]),
-                  _vm._v(" "),
-                  _c("div", [_vm._v("-2°C")])
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "flex items-center mt-8" }, [
-                _c("div", { staticClass: "w-1/6 text-lg text-gray-200" }, [
-                  _vm._v("TUE")
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "w-4/6 px-4 flex items-center" }, [
-                  _c("div", [_vm._v("icon")]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "ml-3" }, [
-                    _vm._v("Cloudy with a chance of showers")
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "w-1/6 text-right" }, [
-                  _c("div", [_vm._v("5°C")]),
-                  _vm._v(" "),
-                  _c("div", [_vm._v("-2°C")])
-                ])
-              ])
-            ]
-          )
-        ]
-      )
+      _c("p", [
+        _vm._v("Selected: "),
+        _c("strong", { attrs: { id: "address-value" } }, [_vm._v("none")])
+      ])
     ])
   }
 ]
