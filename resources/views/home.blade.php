@@ -9,7 +9,7 @@
     <script src="/js/app.js" defer></script>
 </head>
 <body class="bg-blue-500">
-    <div id="app">
+    <div id="app" class="fex justify-center pt-16">
         <weather-card></weather-card>
     </div>
 </body>
