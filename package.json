@@ -27,6 +27,7 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
+        "places.js": "^1.19.0",
         "tailwindcss": "^2.1.1"
     }
 }

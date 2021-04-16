@@ -3,7 +3,7 @@
   <p v-if="!isLoading">Veriable Loading...</p>
   <div class="text-white mb-8" v-if="isLoading">
       <div class="places-input text-gray-800">
-          <input type="search" id="address" class="form-control" placeholder="Choose a city..." />
+          <input type="search" id="address-input" placeholder="Where are we going?" />
           <p>Selected: <strong id="address-value">none</strong></p>
       </div>
       <div class="weather-container font-sans md:w-128 max-w-lg rounded-lg overflow-hidden bg-gray-900 shadow-lg mt-8">
@@ -38,7 +38,7 @@ export default {
                 degree: '',
                 felt: '',
                 summary: '',
-                icon: 'https://www.weatherbit.io/static/img/icons/',
+                icon: 'http://openweathermap.org/img/wn/',
 
             },
             location: {
@@ -54,11 +54,13 @@ export default {
                 .then(response => response.json())
                 .then(data => {
                     console.log(data)
-                    this.currentVeriable.timezone = data.data[0].timezone;
-                    this.currentVeriable.degree = data.data[0].temp;
-                    this.currentVeriable.summary = data.data[0].weather.description;
-                    this.currentVeriable.felt = data.data[0].app_temp;
-                    this.currentVeriable.icon = this.currentVeriable.icon + data.data[0].weather.icon + '.png';
+                    
+                    this.currentVeriable.timezone = data.timezone;
+                    
+                    this.currentVeriable.degree = data.current.temp;
+                    this.currentVeriable.summary = data.current.weather.description;
+                    this.currentVeriable.felt = data.current.feels_like;
+                    this.currentVeriable.icon = this.currentVeriable.icon + data.current.weather[0].icon + '.png';
                     this.isLoading = true;
                 })
         }

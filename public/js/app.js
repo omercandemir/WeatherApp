@@ -1884,7 +1884,7 @@ __webpack_require__.r(__webpack_exports__);
         degree: '',
         felt: '',
         summary: '',
-        icon: 'https://www.weatherbit.io/static/img/icons/'
+        icon: 'http://openweathermap.org/img/wn/'
       },
       location: {
         name: 'Europe/Istanbul',
@@ -1901,11 +1901,11 @@ __webpack_require__.r(__webpack_exports__);
         return response.json();
       }).then(function (data) {
         console.log(data);
-        _this.currentVeriable.timezone = data.data[0].timezone;
-        _this.currentVeriable.degree = data.data[0].temp;
-        _this.currentVeriable.summary = data.data[0].weather.description;
-        _this.currentVeriable.felt = data.data[0].app_temp;
-        _this.currentVeriable.icon = _this.currentVeriable.icon + data.data[0].weather.icon + '.png';
+        _this.currentVeriable.timezone = data.timezone;
+        _this.currentVeriable.degree = data.current.temp;
+        _this.currentVeriable.summary = data.current.weather.description;
+        _this.currentVeriable.felt = data.current.feels_like;
+        _this.currentVeriable.icon = _this.currentVeriable.icon + data.current.weather[0].icon + '.png';
         _this.isLoading = true;
       });
     }
@@ -37542,11 +37542,10 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "places-input text-gray-800" }, [
       _c("input", {
-        staticClass: "form-control",
         attrs: {
           type: "search",
-          id: "address",
-          placeholder: "Choose a city..."
+          id: "address-input",
+          placeholder: "Where are we going?"
         }
       }),
       _vm._v(" "),
