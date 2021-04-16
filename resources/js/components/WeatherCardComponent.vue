@@ -18,8 +18,21 @@
                     <div>{{currentVeriable.timezone}}</div>
                 </div>
             </div>
-            <div><img :src="currentVeriable.icon" :alt="currentVeriable.timezone" width="96px" height="96px"></div>
+            <div><img :src="currentVeriable.icon" :alt="currentVeriable.timezone"></div>
         </div>
+        <div class="future-weather text-sm bg-gray-800 px-6 py-8 overflow-hidden">
+        <div v-for="(day, index) in daily" :key="day.time" class="flex items-center" :class="{ 'mt-8' : index > 0 }">
+          <div class="w-1/6 text-lg text-gray-200">{{weekDays(day.dt)}}</div>
+          <div class="w-4/6 px-4 flex items-center">
+            <div><img :src="icon + day.weather[0].icon + '.png'" alt=""></div>
+            <div class="ml-3">{{day.weather[0].description}}</div>
+          </div>
+          <div class="w-1/6 text-right">
+            <div>{{Math.round(day.temp.max - 273.15)}} °C</div>
+            <div>{{Math.round(day.temp.min - 273.15)}} °C</div>
+          </div>
+        </div>
+      </div> <!-- end future-weather -->
       </div>
   </div>
 </div>
@@ -33,6 +46,7 @@ export default {
     data() {
         return {
             isLoading: false,
+            icon: 'http://openweathermap.org/img/wn/',
             currentVeriable: {
                 timezone: '',
                 degree: '',
@@ -41,6 +55,7 @@ export default {
                 icon: 'http://openweathermap.org/img/wn/',
 
             },
+            daily: [],
             location: {
                 name: 'Europe/Istanbul',
                 lat: 41.0351,
@@ -57,14 +72,21 @@ export default {
                     
                     this.currentVeriable.timezone = data.timezone;
                     
-                    this.currentVeriable.degree = data.current.temp;
+                    this.currentVeriable.degree = Math.round(data.current.temp - 273.15);
                     this.currentVeriable.summary = data.current.weather.description;
-                    this.currentVeriable.felt = data.current.feels_like;
+                    this.currentVeriable.felt = Math.round(data.current.feels_like - 273.15);
                     this.currentVeriable.icon = this.currentVeriable.icon + data.current.weather[0].icon + '.png';
+
+                    this.daily = data.daily
                     this.isLoading = true;
                 })
+        },
+        weekDays(timestamp){
+            const newDate = new Date(timestamp*1000)
+            const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
+            return days[newDate.getDay()]
         }
-    },
+    }
 }
 </script>
 

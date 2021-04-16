@@ -1872,6 +1872,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mounted: function mounted() {
     this.fetchData();
@@ -1879,6 +1892,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       isLoading: false,
+      icon: 'http://openweathermap.org/img/wn/',
       currentVeriable: {
         timezone: '',
         degree: '',
@@ -1886,6 +1900,7 @@ __webpack_require__.r(__webpack_exports__);
         summary: '',
         icon: 'http://openweathermap.org/img/wn/'
       },
+      daily: [],
       location: {
         name: 'Europe/Istanbul',
         lat: 41.0351,
@@ -1902,12 +1917,18 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (data) {
         console.log(data);
         _this.currentVeriable.timezone = data.timezone;
-        _this.currentVeriable.degree = data.current.temp;
+        _this.currentVeriable.degree = Math.round(data.current.temp - 273.15);
         _this.currentVeriable.summary = data.current.weather.description;
-        _this.currentVeriable.felt = data.current.feels_like;
+        _this.currentVeriable.felt = Math.round(data.current.feels_like - 273.15);
         _this.currentVeriable.icon = _this.currentVeriable.icon + data.current.weather[0].icon + '.png';
+        _this.daily = data.daily;
         _this.isLoading = true;
       });
+    },
+    weekDays: function weekDays(timestamp) {
+      var newDate = new Date(timestamp * 1000);
+      var days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+      return days[newDate.getDay()];
     }
   }
 });
@@ -37521,13 +37542,70 @@ var render = function() {
                     _c("img", {
                       attrs: {
                         src: _vm.currentVeriable.icon,
-                        alt: _vm.currentVeriable.timezone,
-                        width: "96px",
-                        height: "96px"
+                        alt: _vm.currentVeriable.timezone
                       }
                     })
                   ])
                 ]
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass:
+                    "future-weather text-sm bg-gray-800 px-6 py-8 overflow-hidden"
+                },
+                _vm._l(_vm.daily, function(day, index) {
+                  return _c(
+                    "div",
+                    {
+                      key: day.time,
+                      staticClass: "flex items-center",
+                      class: { "mt-8": index > 0 }
+                    },
+                    [
+                      _c(
+                        "div",
+                        { staticClass: "w-1/6 text-lg text-gray-200" },
+                        [_vm._v(_vm._s(_vm.weekDays(day.dt)))]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "w-4/6 px-4 flex items-center" },
+                        [
+                          _c("div", [
+                            _c("img", {
+                              attrs: {
+                                src: _vm.icon + day.weather[0].icon + ".png",
+                                alt: ""
+                              }
+                            })
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "ml-3" }, [
+                            _vm._v(_vm._s(day.weather[0].description))
+                          ])
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "w-1/6 text-right" }, [
+                        _c("div", [
+                          _vm._v(
+                            _vm._s(Math.round(day.temp.max - 273.15)) + " °C"
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("div", [
+                          _vm._v(
+                            _vm._s(Math.round(day.temp.min - 273.15)) + " °C"
+                          )
+                        ])
+                      ])
+                    ]
+                  )
+                }),
+                0
               )
             ]
           )
