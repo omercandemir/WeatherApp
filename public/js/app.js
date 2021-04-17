@@ -8600,10 +8600,12 @@ __webpack_require__.r(__webpack_exports__);
         $address.textContent = e.suggestion.value;
         _this.location.name = "".concat(e.suggestion.name, ", ").concat(e.suggestion.country);
         _this.location.lat = e.suggestion.latlng.lat;
-        _this.location.lng = e.suggestion.latlng.lng;
+        _this.location.lon = e.suggestion.latlng.lng;
+
+        _this.fetchData();
       });
       placesAutocomplete.on('clear', function () {
-        $address.textContent = 'none';
+        $address.textContent = this.location.name;
       });
     }, 1000);
   },
@@ -8643,7 +8645,7 @@ __webpack_require__.r(__webpack_exports__);
         _this2.currentVeriable.degree = Math.round(data.current.temp - 273.15);
         _this2.currentVeriable.summary = data.current.weather.description;
         _this2.currentVeriable.felt = Math.round(data.current.feels_like - 273.15);
-        _this2.currentVeriable.icon = _this2.currentVeriable.icon + data.current.weather[0].icon + '.png';
+        _this2.currentVeriable.icon = data.current.weather[0].icon;
         _this2.daily = data.daily;
         _this2.isLoading = true;
       });
@@ -47961,7 +47963,21 @@ var render = function() {
     _vm._v(" "),
     _vm.isLoading
       ? _c("div", { staticClass: "text-white mb-8" }, [
-          _vm._m(0),
+          _c(
+            "div",
+            {
+              staticClass: "places-input text-gray-800",
+              attrs: { id: "search" }
+            },
+            [
+              _c("p", [
+                _vm._v("Selected: "),
+                _c("strong", { attrs: { id: "address-value" } }, [
+                  _vm._v(_vm._s(_vm.location.name))
+                ])
+              ])
+            ]
+          ),
           _vm._v(" "),
           _c(
             "div",
@@ -48010,7 +48026,7 @@ var render = function() {
                   _c("div", [
                     _c("img", {
                       attrs: {
-                        src: _vm.currentVeriable.icon,
+                        src: this.icon + _vm.currentVeriable.icon + ".png",
                         alt: _vm.currentVeriable.timezone
                       }
                     })
@@ -48082,23 +48098,7 @@ var render = function() {
       : _vm._e()
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "places-input text-gray-800", attrs: { id: "search" } },
-      [
-        _c("p", [
-          _vm._v("Selected: "),
-          _c("strong", { attrs: { id: "address-value" } }, [_vm._v("none")])
-        ])
-      ]
-    )
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

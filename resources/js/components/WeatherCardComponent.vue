@@ -3,7 +3,7 @@
   <p v-if="!isLoading">Veriable Loading...</p>
   <div class="text-white mb-8" v-if="isLoading">
       <div class="places-input text-gray-800" id="search">
-          <p>Selected: <strong id="address-value">none</strong></p>
+          <p>Selected: <strong id="address-value">{{location.name}}</strong></p>
       </div>
       <div class="weather-container font-sans md:w-128 max-w-lg rounded-lg overflow-hidden bg-gray-900 shadow-lg mt-8">
         <div class="current-weather flex items-center justify-between px-6 py-8">
@@ -17,7 +17,7 @@
                     <div>{{currentVeriable.timezone}}</div>
                 </div>
             </div>
-            <div><img :src="currentVeriable.icon" :alt="currentVeriable.timezone"></div>
+            <div><img :src="this.icon + currentVeriable.icon + '.png'" :alt="currentVeriable.timezone"></div>
         </div>
         <div class="future-weather text-sm bg-gray-800 px-6 py-8 overflow-hidden">
         <div v-for="(day, index) in daily" :key="day.time" class="flex items-center" :class="{ 'mt-8' : index > 0 }">
@@ -62,10 +62,11 @@ export default {
                     $address.textContent = e.suggestion.value
                     this.location.name = `${e.suggestion.name}, ${e.suggestion.country}`
                     this.location.lat = e.suggestion.latlng.lat
-                    this.location.lng = e.suggestion.latlng.lng
+                    this.location.lon = e.suggestion.latlng.lng
+                    this.fetchData()
                 });
                 placesAutocomplete.on('clear', function () {
-                    $address.textContent = 'none';
+                    $address.textContent = this.location.name;
                 });
         }, 1000)
         
@@ -107,7 +108,7 @@ export default {
                     this.currentVeriable.degree = Math.round(data.current.temp - 273.15);
                     this.currentVeriable.summary = data.current.weather.description;
                     this.currentVeriable.felt = Math.round(data.current.feels_like - 273.15);
-                    this.currentVeriable.icon = this.currentVeriable.icon + data.current.weather[0].icon + '.png';
+                    this.currentVeriable.icon = data.current.weather[0].icon;
 
                     this.daily = data.daily
                     this.isLoading = true;
