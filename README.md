@@ -6,6 +6,7 @@
 
 - **[Laravel](https://laravel.com/)**
 - **[Vue](https://vuejs.org/)**
+- **[Axios](https://github.com/axios/axios)**
 - **[Open Weather Map API](https://openweathermap.org/)**
 - **[Algolia Places API](https://www.algolia.com/)**
 
